@@ -1,5 +1,7 @@
 var app = {
     url: 'https://griffis.edumedia.ca/mad9022/tundra/get.profiles.php?gender=',
+    users: [],
+    imgBaseURL: '',
 
     initialize: () => {
         document.addEventListener('deviceready', app.onDeviceReady);
@@ -13,8 +15,23 @@ var app = {
         //app.url = app.url + 'female';
         //app.url = app.url + 'male';
     },
+
     heyListen: () => {
-        //document.addEventListener();
+        document.querySelector('.b1').addEventListener('click', app.zoop);
+        document.querySelector('.b2').addEventListener('click', app.zoop);
+
+    },
+
+    zoop: () => {
+        if (document.querySelector('.Potentials').classList.contains('active')) {
+            console.log("navigating from Potentials");
+            document.querySelector('.Potentials').classList.remove('active');
+            document.querySelector('.Favourites').classList.add('active');
+        } else if (document.querySelector('.Favourites').classList.contains('active')) {
+            console.log("navigating from Favourites");
+            document.querySelector('.Favourites').classList.remove('active');
+            document.querySelector('.Potentials').classList.add('active');
+        }
     },
 
     fetchBoy: () => {
@@ -30,69 +47,125 @@ var app = {
 
     allTheSingleLadies: (myJson) => {
         let profiles = myJson.profiles;
+        console.log(myJson);
+        app.users = profiles;
         console.log(profiles);
-        let imgBaseURL = 'https:' + decodeURIComponent(myJson.imgBaseURL);
+        app.imgBaseURL = 'https:' + decodeURIComponent(myJson.imgBaseURL);
 
-        //console.log(imgBaseURL);
 
         profiles.forEach(profile => {
-            //console.log(profile.id);
-            //console.log(imgBaseURL + profile.avatar)
-            // console.log(profile.first);
-            // console.log(profile.last);
-            // console.log(profile.gender);
-            // console.log(profile.distance);
 
             let card = document.createElement('div')
             card.classList.add('card');
             card.classList.add('fixed');
+            card.setAttribute('data-id', profile.id)
+
+            let header = document.createElement('header');
+            card.appendChild(header);
 
             let img = document.createElement('img');
-            img.src = (imgBaseURL + profile.avatar);
+            img.src = (app.imgBaseURL + profile.avatar);
             img.alt = (profile.first + profile.last);
+            img.classList.add('round');
             card.appendChild(img);
 
-            let Name = document.createElement('h2');
+            let Name = document.createElement('h3');
             Name.textContent = (`${profile.first}  ${profile.last}`);
-            card.appendChild(Name);
+            header.appendChild(Name);
+
+            let footer = document.createElement('footer');
+            card.appendChild(footer);
 
             let Gender = document.createElement('p');
             Gender.textContent = profile.gender;
-            card.appendChild(Gender);
+            footer.appendChild(Gender);
 
             let Distance = document.createElement('p');
-            Distance.textContent = profile.distance;
-            card.appendChild(Distance);
+            Distance.textContent = (profile.distance + " away");
+            footer.appendChild(Distance);
 
             document.querySelector('.Potentials').appendChild(card);
         });
 
         let target = document.querySelectorAll('.card');
-        // console.log('Swipe Target',target);
         target.forEach((card) => {
             let tiny = new tinyshell(card);
             console.log(card);
             tiny.addEventListener('swipeleft', app.not);
             tiny.addEventListener('swiperight', app.hot);
         })
-
-
-
     },
+
     hot: (ev) => {
         //swipe right
         console.log(ev.currentTarget)
         console.log('hot')
         ev.currentTarget.classList.add('right')
-        app.fetchBoy();
+
+        let id = ev.currentTarget.getAttribute('data-id')
+        let cards = document.querySelectorAll('.card')
+        if (cards.length <= 3) {
+            console.log('getting new people')
+            app.fetchBoy();
+        } else {
+            console.log('not getting new people')
+        }
+        setTimeout(() => {
+            ev.target.remove();
+            
+        }, 500)
+
+       
+        
+
+        let fave = document.createElement('li');
+        fave.classList.add('list-item')
+
+        console.log(id)
+        app.users.forEach(user => {
+            console.log(user.id)
+            if (user.id == id) {
+                console.log("id found")
+                let name = document.createElement('h3');
+                let pic = document.createElement('img');
+                pic.classList.add('icon')
+                name.textContent = (user.first + " " + user.last)
+                pic.src = app.imgBaseURL + user.avatar;
+                fave.appendChild(pic)
+                fave.appendChild(name)
+            }
+        });
+
+        document.querySelector('.listo').appendChild(fave);
+
     },
+
     not: (ev) => {
         //swipe left
         console.log(ev.currentTarget)
         ev.currentTarget.classList.add('left')
         console.log('not')
-        app.fetchBoy();
+
+
+        let cards = document.querySelectorAll('.card')
+        if (cards.length <= 3) {
+            console.log('getting new people')
+            app.fetchBoy();
+        } else {
+            console.log('not getting new people')
+        }
+       
+        setTimeout(() => {
+            
+            ev.target.remove();
+            
+        }, 500)
+
+
+        
+
     },
+
 };
 
 app.initialize();
