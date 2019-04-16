@@ -128,7 +128,15 @@ var app = {
 
             if (user.id == id) {
                 console.log("id found")
-                sessionStorage.setItem(id,JSON.stringify([user.first + " " + user.last,(app.imgBaseURL + user.avatar)]));
+                let n = 0
+                sessionStorage.setItem(id,JSON.stringify([n,(app.imgBaseURL + user.avatar)]));
+                n++;
+                let name = document.createElement('h2')
+                name.textContent = user.first + " " + user.last;
+                let picture = document.createElement('img')
+                picture.src= (app.imgBaseURL + user.avatar);
+                fave.appendChild(name);
+                fave.appendChild(picture);
             }
         });
 
@@ -144,7 +152,7 @@ var app = {
 
 
         let cards = document.querySelectorAll('.card')
-        if (cards.length <= 0) {
+        if (cards.length <= 3) {
             console.log('getting new people')
             app.fetchBoy();
         } else {
@@ -162,6 +170,11 @@ var app = {
 
     },
 
+    matches: () => {
+        id
+        sessionStorage.
+        sessionStorage.getItem()
+    },
 };
 
 app.initialize();

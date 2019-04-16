@@ -9,6 +9,9 @@
   "installed_plugins": {
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "ca.edumedia.carr0476.tundra"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "ca.edumedia.carr0476.tundra"
     }
   },
   "dependent_plugins": {}
