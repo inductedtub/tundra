@@ -58,6 +58,8 @@ var app = {
             let card = document.createElement('div')
             card.classList.add('card');
             card.classList.add('fixed');
+            
+           
             card.setAttribute('data-id', profile.id)
 
             let header = document.createElement('header');
@@ -104,6 +106,8 @@ var app = {
 
         let id = ev.currentTarget.getAttribute('data-id')
         let cards = document.querySelectorAll('.card')
+
+
         if (cards.length <= 3) {
             console.log('getting new people')
             app.fetchBoy();
@@ -112,27 +116,19 @@ var app = {
         }
         setTimeout(() => {
             ev.target.remove();
-            
-        }, 500)
 
-       
-        
+        }, 500)
 
         let fave = document.createElement('li');
         fave.classList.add('list-item')
-
+        //sessionStorage.setItem(id,{"name": user.first + " " + user.last})
         console.log(id)
         app.users.forEach(user => {
             console.log(user.id)
+
             if (user.id == id) {
                 console.log("id found")
-                let name = document.createElement('h3');
-                let pic = document.createElement('img');
-                pic.classList.add('icon')
-                name.textContent = (user.first + " " + user.last)
-                pic.src = app.imgBaseURL + user.avatar;
-                fave.appendChild(pic)
-                fave.appendChild(name)
+                sessionStorage.setItem(id,JSON.stringify([user.first + " " + user.last,(app.imgBaseURL + user.avatar)]));
             }
         });
 
@@ -148,21 +144,21 @@ var app = {
 
 
         let cards = document.querySelectorAll('.card')
-        if (cards.length <= 3) {
+        if (cards.length <= 0) {
             console.log('getting new people')
             app.fetchBoy();
         } else {
             console.log('not getting new people')
         }
-       
+
         setTimeout(() => {
-            
+
             ev.target.remove();
-            
+
         }, 500)
 
 
-        
+
 
     },
 
