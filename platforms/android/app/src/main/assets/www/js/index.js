@@ -29,6 +29,7 @@ var app = {
             document.querySelector('.Favourites').classList.add('active');
         } else if (document.querySelector('.Favourites').classList.contains('active')) {
             console.log("navigating from Favourites");
+            app.matches();
             document.querySelector('.Favourites').classList.remove('active');
             document.querySelector('.Potentials').classList.add('active');
         }
@@ -58,8 +59,8 @@ var app = {
             let card = document.createElement('div')
             card.classList.add('card');
             card.classList.add('fixed');
-            
-           
+
+
             card.setAttribute('data-id', profile.id)
 
             let header = document.createElement('header');
@@ -114,9 +115,11 @@ var app = {
         } else {
             console.log('not getting new people')
         }
+
+        document.querySelector('.rightSwipe').style.display = 'block'
         setTimeout(() => {
             ev.target.remove();
-
+            document.querySelector('.rightSwipe').style.display = 'none'
         }, 500)
 
         let fave = document.createElement('li');
@@ -128,13 +131,13 @@ var app = {
 
             if (user.id == id) {
                 console.log("id found")
-                let n = 0
-                sessionStorage.setItem(id,JSON.stringify([n,(app.imgBaseURL + user.avatar)]));
+                let n = 1
+                sessionStorage.setItem(n, JSON.stringify([user.first + " " + user.last, app.imgBaseURL + user.avatar]));
                 n++;
                 let name = document.createElement('h2')
                 name.textContent = user.first + " " + user.last;
                 let picture = document.createElement('img')
-                picture.src= (app.imgBaseURL + user.avatar);
+                picture.src = (app.imgBaseURL + user.avatar);
                 fave.appendChild(name);
                 fave.appendChild(picture);
             }
@@ -159,8 +162,9 @@ var app = {
             console.log('not getting new people')
         }
 
+        document.querySelector('.leftSwipe').style.display = 'block'
         setTimeout(() => {
-
+            document.querySelector('.leftSwipe').style.display = 'none'
             ev.target.remove();
 
         }, 500)
@@ -171,9 +175,21 @@ var app = {
     },
 
     matches: () => {
-        id
-        sessionStorage.
-        sessionStorage.getItem()
+        let n = 1;
+        let fave = document.createElement('li');
+        fave.classList.add('list-item')
+
+        while (sessionStorage.getItem(n)) {
+            console.log('this one'+sessionStorage.getItem(n))
+
+            // let name = document.createElement('h2')
+            // name.textContent = sessionStorage.getItem(n[0]);
+            // let picture = document.createElement('img')
+            // picture.src = sessionStorage.getItem(n[1]);
+            // fave.appendChild(name);
+            // fave.appendChild(picture);
+        }
+        document.querySelector('.listo').appendChild(fave);
     },
 };
 
